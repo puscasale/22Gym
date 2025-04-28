@@ -1,0 +1,103 @@
+### Signup (creare cont)
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "ana",
+  "email": "ana@email.com",
+  "password": "1234"
+}
+
+### Signup (creare cont)
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "ana",
+  "email": "ana@email.com",
+  "password": "1234"
+}
+
+### Login (autentificare)
+POST http://localhost:8080/api/auth/login?username=ana&password=1234
+
+
+### CREATE Membership (GOLD - 6 luni)
+POST http://localhost:8080/api/admin/memberships
+Content-Type: application/json
+
+{
+  "type": "GOLD",
+  "price": 140.00,
+  "months": 6
+}
+
+### GET all Memberships
+GET http://localhost:8080/api/admin/memberships
+
+### Assign Membership ID 1 to Member ID 1
+POST http://localhost:8080/api/membership/1/membership/1
+
+### Get Membership Info for Member ID 1
+GET http://localhost:8080/api/membership/1/membership
+
+### Cancel Membership for Member ID 1
+DELETE http://localhost:8080/api/membership/1/membership
+
+### CREATE Trainer
+POST http://localhost:8080/api/admin/trainer
+Content-Type: application/json
+
+{
+  "email": "alepuscas04@gmail.com",
+  "password": "alesefa",
+  "username": "puscasale"
+}
+
+### Login (autentificare)
+POST http://localhost:8080/api/auth/login?username=puscasale&password=alesefa
+
+### Create new Fitness Class
+POST http://localhost:8080/api/classes
+Content-Type: application/json
+
+{
+  "name": "Yoga de seară",
+  "date": "2025-03-26",
+  "startHour": "18:00",
+  "endHour": "18:50",
+  "maxCapacity": 20,
+  "description": "Relaxare și stretching",
+  "trainer": {
+    "id": 1,
+    "email": "alepuscas04@gmail.com",
+    "password": "alesefa",
+    "username": "puscasale"
+  }
+}
+
+### Delete Fitness Class (ID 1)
+DELETE http://localhost:8080/api/classes/1
+
+
+### Update Fitness Class (ID 1)
+PUT http://localhost:8080/api/classes/1
+Content-Type: application/json
+
+{
+  "name": "Yoga intensivă",
+  "date": "2025-03-26",
+  "startHour": "19:00",
+  "endHour": "20:00",
+  "maxCapacity": 15,
+  "description": "Stretching și respirație profundă",
+  "trainer": {
+    "id": 1,
+    "email": "alepuscas04@gmail.com",
+    "password": "alesefa",
+    "username": "puscasale"
+  }
+}
+
+### Get all Fitness Classes
+GET http://localhost:8080/api/classes
