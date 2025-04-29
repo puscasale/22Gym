@@ -14,4 +14,5 @@ public class Trainer extends BaseEntity<Long> {
     private String email;
     private String password;
     private String username;
+    private String fullName;
 }

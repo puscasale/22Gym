@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface FitnessClassRepository extends JpaRepository<FitnessClass, Long> {
     List<FitnessClass> findByDate(LocalDate date);
+
+    List<FitnessClass> findByDateBetween(LocalDate start, LocalDate end);
 }

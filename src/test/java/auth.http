@@ -27,19 +27,19 @@ POST http://localhost:8080/api/admin/memberships
 Content-Type: application/json
 
 {
-  "type": "GOLD",
-  "price": 140.00,
-  "months": 6
+  "type": "STUDENT",
+  "price": 120.00,
+  "months": 1
 }
 
 ### GET all Memberships
 GET http://localhost:8080/api/admin/memberships
 
 ### Assign Membership ID 1 to Member ID 1
-POST http://localhost:8080/api/membership/1/membership/1
+POST http://localhost:8080/api/membership/5/membership/2
 
 ### Get Membership Info for Member ID 1
-GET http://localhost:8080/api/membership/1/membership
+GET http://localhost:8080/api/membership/5/membership
 
 ### Cancel Membership for Member ID 1
 DELETE http://localhost:8080/api/membership/1/membership
@@ -51,7 +51,8 @@ Content-Type: application/json
 {
   "email": "alepuscas04@gmail.com",
   "password": "alesefa",
-  "username": "puscasale"
+  "username": "puscasale",
+  "fullName": "Alexandra Puscas"
 }
 
 ### Login (autentificare)
@@ -63,16 +64,17 @@ Content-Type: application/json
 
 {
   "name": "Yoga de seară",
-  "date": "2025-03-26",
+  "date": "2025-04-29",
   "startHour": "18:00",
   "endHour": "18:50",
   "maxCapacity": 20,
-  "description": "Relaxare și stretching",
+  "description": "Pilates is a low-impact exercise method that focuses on core strength, flexibility, and overall body awareness. It combines controlled movements, breathing techniques, and muscle engagement to improve posture, balance, and coordination.",
   "trainer": {
-    "id": 1,
+    "id": 2,
     "email": "alepuscas04@gmail.com",
     "password": "alesefa",
-    "username": "puscasale"
+    "username": "puscasale",
+    "fullName": "Alexandra Puscas"
   }
 }
 
@@ -86,7 +88,7 @@ Content-Type: application/json
 
 {
   "name": "Yoga intensivă",
-  "date": "2025-03-26",
+  "date": "2025-03-24",
   "startHour": "19:00",
   "endHour": "20:00",
   "maxCapacity": 15,

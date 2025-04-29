@@ -1,0 +1,21 @@
+.swal2-popup {
+    background: #111827 !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+}
+.swal2-title {
+    color: #ffffff !important;
+}
+.swal2-icon--success {
+    color: #014c32 !important;
+}
+.swal2-icon--error {
+    color: #ff6666 !important;
+}
+
+.swal2-icon--info {
+    color: #ffffff !important;
+}
+
+
+
