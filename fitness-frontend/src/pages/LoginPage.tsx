@@ -143,9 +143,7 @@ export default function LoginPage() {
 
             const user = JSON.parse(text);
             sessionStorage.setItem("user", JSON.stringify(user));
-            console.log('Login successful:', user);
-            alert(`User saved in sessionStorage:\n${JSON.stringify(user, null, 2)}`);
-            if (user.membership!="") {
+            if (user.userType ==='MEMBER') {
                 navigate('/main-member');
             } else {
                 navigate('/main-trainer');

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import Logo from '../assets/logobanner.png';
 import { notifyError, notifySuccess } from '../utils/Notify';
+import SidebarMember from "../components/SidebarMember.tsx";
+import Swal from "sweetalert2";
 
 interface Membership {
     id: number;
@@ -159,7 +160,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function ViewMembership() {
-    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [membership, setMembership] = useState<Membership | null>(null);
     const navigate = useNavigate();
 
@@ -178,48 +178,41 @@ export default function ViewMembership() {
                 return res.json();
             })
             .then((data) => setMembership(data))
-            .catch(() => notifyError("Couldn't load membership info"));
-    }, [user, navigate]);
+            .catch();
+    }, []);
 
-    const handleLogout = () => {
-        sessionStorage.clear();
-        navigate('/');
-    };
+
 
     const handleCancel = async () => {
-        try {
-            await fetch(`http://localhost:8080/api/membership/${user.id}/membership`, {
-                method: 'DELETE',
-            });
-            notifySuccess("Membership cancelled.");
-            setMembership(null);
-        } catch {
-            notifyError("Failed to cancel membership.");
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will cancel your current membership.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, cancel it!'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await fetch(`http://localhost:8080/api/membership/${user.id}/membership`, {
+                    method: 'DELETE',
+                });
+                notifySuccess("Membership cancelled.");
+                setMembership(null);
+            } catch {
+                notifyError("Failed to cancel membership.");
+            }
         }
     };
+
 
     return (
         <>
             <GlobalStyle />
             <div className="container">
-                <aside className={`sidebar ${sidebarOpen ? '' : 'closed'}`}>
-                    <img className="logo" src={Logo} alt="22GYM Logo" />
-                    <button className="toggle-button" onClick={() => setSidebarOpen(!sidebarOpen)}>
-                        {sidebarOpen ? 'Hide' : 'Show'}
-                    </button>
-                    <nav>
-                        <Link to="/main-member">Home</Link>
-                        <Link to="/view-membership">View membership</Link>
-                        <Link to="/cancel-membership">Cancel Membership</Link>
-                        <Link to="/view-classes-member">View Classes</Link>
-                        <Link to="/view-bookings">View Bookings</Link>
-                        <Link to="/history-bookings">History Bookings</Link>
-                        <Link to="#">Settings</Link>
-                    </nav>
-                    <div className="sidebar-footer">
-                        <a href="#" onClick={handleLogout}>Logout</a>
-                    </div>
-                </aside>
+                <SidebarMember/>
 
                 <div className="main">
                     <h1>Your Membership Details</h1>
@@ -230,16 +223,29 @@ export default function ViewMembership() {
                             <>
                                 <div className="membership-status">
                                     <span><strong>{membership.type}</strong></span>
-                                    <span className="status-active">STATUS: ACTIVE</span>
+                                    {new Date(membership.endDate) < new Date() ? (
+                                        <span style={{ color: '#ef4444' }}>STATUS: INACTIVE</span>
+                                    ) : (
+                                        <span className="status-active">STATUS: ACTIVE</span>
+                                    )}
+
                                 </div>
                                 <div className="details">
-                                    <p>Start date: {membership.startDate ? new Date(membership.startDate).toLocaleDateString('en-GB') : 'N/A'}</p>
-                                    <p>End date: {membership.endDate ? new Date(membership.endDate).toLocaleDateString('en-GB') : 'N/A'}</p>
+                                    <p>Start date: {new Date(membership.startDate).toLocaleDateString('en-GB')}</p>
+                                    <p>End date: {new Date(membership.endDate).toLocaleDateString('en-GB')}</p>
                                     <p>Price: {membership.price} RON</p>
                                 </div>
                             </>
                         ) : (
-                            <p>No active membership found.</p>
+                            <p style={{
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                color: '#ef4444',
+                                fontSize: '1.2rem'
+                            }}>
+                                You currently do not have an active membership.
+                            </p>
+
                         )}
 
                         <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '2rem' }}>

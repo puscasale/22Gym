@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import Logo from '../assets/logobanner.png';
 import {notifyError, notifySuccess} from "../utils/Notify.ts";
+import SidebarTrainer from "../components/SidebarTrainer.tsx";
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -166,7 +165,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function AddClassTrainer() {
-    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [form, setForm] = useState({
         name: '',
         date: '',
@@ -176,7 +174,6 @@ export default function AddClassTrainer() {
         maxCapacity:''
     });
 
-    const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -229,31 +226,13 @@ export default function AddClassTrainer() {
         }
     };
 
-    const handleLogout = () => {
-        sessionStorage.clear();
-        navigate('/');
-    };
+
 
     return (
         <>
             <GlobalStyle />
             <div className="container">
-                <aside className={`sidebar ${sidebarOpen ? '' : 'closed'}`}>
-                    <img className="logo" src={Logo} alt="22GYM Logo" />
-                    <button className="toggle-button" onClick={() => setSidebarOpen(!sidebarOpen)}>
-                        {sidebarOpen ? 'Hide' : 'Show'}
-                    </button>
-                    <nav>
-                        <Link to="/main-trainer">Home</Link>
-                        <Link to="/view-classes-trainer">View Classes</Link>
-                        <Link to="#">View Schedule</Link>
-                        <Link to="#">Add Class</Link>
-                        <Link to="#">Settings</Link>
-                    </nav>
-                    <div className="sidebar-footer">
-                        <a href="#" onClick={handleLogout}>Logout</a>
-                    </div>
-                </aside>
+                <SidebarTrainer/>
 
                 <div className="main">
                     <div className="info-banner">

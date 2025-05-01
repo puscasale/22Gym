@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate} from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { FaCalendarAlt } from 'react-icons/fa';
-import SidebarTrainer from "../components/SidebarTrainer.tsx";
+import SidebarMember from "../components/SidebarMember.tsx";
 
 interface FitnessClass {
     id: number;
@@ -180,7 +180,7 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-export default function ViewClassesTrainer() {
+export default function ViewClassesMember() {
     const [classes, setClasses] = useState<FitnessClass[]>([]);
     const [startDate, setStartDate] = useState(getMonday(new Date()));
     const navigate = useNavigate();
@@ -214,11 +214,12 @@ export default function ViewClassesTrainer() {
     };
 
 
+
     return (
         <>
             <GlobalStyle />
             <div className="container">
-                <SidebarTrainer/>
+                <SidebarMember/>
 
                 <div className="main">
                     <div className="header">
@@ -242,7 +243,7 @@ export default function ViewClassesTrainer() {
                                     <div
                                         key={cls.id}
                                         className="class-card"
-                                        onClick={() => navigate(`/view-class/${cls.id}`)}
+                                        onClick={() => navigate(`/view-class-member/${cls.id}`)}
                                         style={{ cursor: 'pointer' }}
                                     >
                                         <strong>{formatHour(cls.startHour)} - {formatHour(cls.endHour)}</strong>

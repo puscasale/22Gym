@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import {Link, useNavigate } from 'react-router-dom';
+import { useEffect} from 'react';
+import {useNavigate } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { FaCalendarAlt, FaRegCalendar, FaUserCheck, FaShoppingCart } from "react-icons/fa";
-import Logo from '../assets/logobanner.png';
+import SidebarMember from '../components/SidebarMember';
+
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -35,12 +36,13 @@ const GlobalStyle = createGlobalStyle`
     }
 
     .logo {
-        width: 100%;
-        height: 120px;
+        width: auto;
+        height: 200px;
         margin: 0 auto 2rem auto;
         display: block;
-        object-fit: contain;
+        object-fit: fill;
         transition: all 0.3s ease;
+        transform: translateX(-125px);
     }
 
     .sidebar.closed .logo {
@@ -53,6 +55,7 @@ const GlobalStyle = createGlobalStyle`
         flex-direction: column;
         gap: 2rem;
         padding-left: 10px;
+        margin-top: -100px;
     }
 
     .sidebar nav a {
@@ -182,7 +185,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function MainMember() {
-    const [sidebarOpen, setSidebarOpen] = useState(true);
     const navigate = useNavigate();
 
     const storedUser = sessionStorage.getItem("user");
@@ -195,36 +197,13 @@ export default function MainMember() {
         }
     }, [user, navigate]);
 
-    const handleLogout = () => {
-        sessionStorage.clear();
-        navigate('/');
-    };
+
 
     return (
         <>
             <GlobalStyle />
             <div className="container">
-                <aside className={`sidebar ${sidebarOpen ? '' : 'closed'}`}>
-                    <img className="logo" src={Logo} alt="22GYM Logo" />
-
-                    <button className="toggle-button" onClick={() => setSidebarOpen(!sidebarOpen)}>
-                        {sidebarOpen ? 'Hide' : 'Show'}
-                    </button>
-
-                    <nav>
-                        <Link to="/main-member">Home</Link>
-                        <Link to="/view-membership">View membership</Link>
-                        <Link to="/cancel-membership">Cancel Membership</Link>
-                        <Link to="/view-classes-member">View Classes</Link>
-                        <Link to="/view-bookings">View Bookings</Link>
-                        <Link to="/history-bookings">History Bookings</Link>
-                        <Link to="#">Settings</Link>
-                    </nav>
-
-                    <div className="sidebar-footer">
-                        <a href="#" onClick={handleLogout}>Logout</a>
-                    </div>
-                </aside>
+                <SidebarMember/>
 
                 <div className="main">
                     <div className="welcome">
@@ -238,25 +217,29 @@ export default function MainMember() {
                         <div className="card">
                             <h3><FaShoppingCart /> BUY MEMBERSHIP</h3>
                             <p>Buy a membership right now and pay for it online using your bank card. It will be activated immediately.</p>
-                            <button>BUY</button>
+                            <button onClick={() => navigate('/buy-membership')}>BUY</button>
+
                         </div>
 
                         <div className="card">
                             <h3><FaCalendarAlt /> BOOK CLASSES</h3>
                             <p>Book a class now and secure your spot instantly! Choose your preferred session, and your booking will be confirmed instantly.</p>
-                            <button>BOOK</button>
+                            <button onClick={() => navigate('/view-classes-member')}>BOOK</button>
+
                         </div>
 
                         <div className="card">
                             <h3><FaRegCalendar /> UPCOMING CLASSES</h3>
                             <p>Stay on top of your schedule! View your active bookings and manage your upcoming classes with ease. Cancel your reservations anytime.</p>
-                            <button>VIEW</button>
+                            <button onClick={() => navigate('/bookings')}>VIEW</button>
+
                         </div>
 
                         <div className="card">
                             <h3><FaUserCheck /> ACTIVE MEMBERSHIP</h3>
                             <p>Check your active membership now! Stay updated on your membership details, including type and expiration date.</p>
-                            <button>VIEW</button>
+                            <button onClick={() => navigate('/view-membership')}>VIEW</button>
+
                         </div>
                     </div>
                 </div>

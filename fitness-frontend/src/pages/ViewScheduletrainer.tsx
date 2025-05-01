@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import Logo from '../assets/logobanner.png';
 import { notifyError, notifySuccess } from '../utils/Notify';
 import Swal from "sweetalert2";
+import SidebarTrainer from "../components/SidebarTrainer.tsx";
 
 interface FitnessClass {
     id: number;
@@ -149,7 +149,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function ViewScheduleTrainer() {
-    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [classes, setClasses] = useState<FitnessClass[]>([]);
     const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
     const navigate = useNavigate();
@@ -191,10 +190,7 @@ export default function ViewScheduleTrainer() {
         }
     };
 
-    const handleLogout = () => {
-        sessionStorage.clear();
-        navigate('/');
-    };
+
 
     const filteredClasses = classes.filter(cls => cls.date === selectedDate);
 
@@ -202,22 +198,7 @@ export default function ViewScheduleTrainer() {
         <>
             <GlobalStyle />
             <div className="container">
-                <aside className={`sidebar ${sidebarOpen ? '' : 'closed'}`}>
-                    <img className="logo" src={Logo} alt="22GYM Logo" />
-                    <button className="toggle-button" onClick={() => setSidebarOpen(!sidebarOpen)}>
-                        {sidebarOpen ? 'Hide' : 'Show'}
-                    </button>
-                    <nav>
-                        <Link to="/main-trainer">Home</Link>
-                        <Link to="/view-classes-trainer">View Classes</Link>
-                        <Link to="/view-schedule-trainer">View Schedule</Link>
-                        <Link to="#">Add Class</Link>
-                        <Link to="#">Settings</Link>
-                    </nav>
-                    <div className="sidebar-footer">
-                        <a href="#" onClick={handleLogout}>Logout</a>
-                    </div>
-                </aside>
+                <SidebarTrainer/>
 
                 <div className="main">
                     <h1 style={{ marginBottom: '1rem' }}>Your Schedule</h1>

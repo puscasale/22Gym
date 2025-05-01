@@ -1,22 +1,15 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import {  useNavigate } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import Logo from '../assets/logobanner.png';
-import { notifyError, notifySuccess } from '../utils/Notify';
-
-interface Membership {
-    id: number;
-    type: string;
-    startDate: string;
-    endDate: string;
-    price: number;
-}
+import { CgGym } from "react-icons/cg";
+import { FaCalendarTimes, FaCalendarAlt, FaRegCalendar } from "react-icons/fa";
+import SidebarTrainer from "../components/SidebarTrainer.tsx";
 
 const GlobalStyle = createGlobalStyle`
     body {
         margin: 0;
         font-family: 'Josefin Sans', sans-serif;
-        background-color: #e5e7eb;
+        background-color: #f3f4f6;
     }
 
     .container {
@@ -30,10 +23,10 @@ const GlobalStyle = createGlobalStyle`
         color: white;
         padding: 2rem 1rem;
         width: 250px;
+        transition: all 0.3s ease;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        transition: all 0.3s ease;
         position: relative;
     }
 
@@ -43,11 +36,13 @@ const GlobalStyle = createGlobalStyle`
     }
 
     .logo {
-        width: 100%;
-        height: 120px;
+        width: auto;
+        height: 200px;
         margin: 0 auto 2rem auto;
-        object-fit: contain;
+        display: block;
+        object-fit: fill;
         transition: all 0.3s ease;
+        transform: translateX(-125px);
     }
 
     .sidebar.closed .logo {
@@ -105,152 +100,141 @@ const GlobalStyle = createGlobalStyle`
 
     .main {
         flex: 1;
-        padding: 3rem 4rem;
-        background-color: #f9fafb;
+        background-color: #f3f4f6;
+        padding: 2rem;
+        overflow-y: auto;
     }
 
-    .membership-box {
-        background: white;
+    .welcome {
+        margin: 3rem 4rem 2rem 4rem;
+    }
+
+    .welcome h1 {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        color: #84cc16;
+    }
+
+    .welcome p {
+        color: #374151;
+        font-size: 1.15rem;
+        max-width: none;
+        line-height: 2;
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+        margin-top: 5rem;
+        padding: 0 4rem;
+    }
+
+    .card {
+        background-color: white;
         padding: 2rem;
         border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        margin-top: 2rem;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
     }
 
-    .membership-status {
+    .card:hover {
+        transform: translateY(-4px);
+    }
+
+    .card h3 {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
+        gap: 0.5rem;
+        font-size: 1.2rem;
+        color: #111827;
     }
 
-    .status-active {
-        color: #65a30d;
+    .card p {
+        font-size: 0.95rem;
+        color: #4b5563;
+        margin: 1rem 0;
     }
 
-    .details p {
-        margin: 0.3rem 0;
-        color: #374151;
-    }
-
-    .buttons {
-        margin-top: 2rem;
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-    }
-
-    .buttons button {
+    .card button {
         background-color: #84cc16;
         color: white;
-        font-weight: bold;
-        padding: 0.75rem 2rem;
         border: none;
-        border-radius: 8px;
+        padding: 0.5rem 1.2rem;
+        border-radius: 6px;
+        font-weight: bold;
         cursor: pointer;
-        font-size: 1rem;
     }
 
-    .buttons button.cancel {
-        background-color: #ef4444;
+    .card button:hover {
+        background-color: #65a30d;
+    }
+
+    @media (max-width: 768px) {
+        .cards {
+            grid-template-columns: 1fr;
+            padding: 0 2rem;
+        }
     }
 `;
 
-export default function ViewMembership() {
-    const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [membership, setMembership] = useState<Membership | null>(null);
+export default function MainTrainer() {
     const navigate = useNavigate();
 
-    const storedUser = sessionStorage.getItem('user');
+    const storedUser = sessionStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
+    const displayName = user?.fullName || user?.username || "Trainer";
 
     useEffect(() => {
         if (!user) {
             navigate('/');
-            return;
         }
-
-        fetch(`http://localhost:8080/api/membership/${user.id}/membership`)
-            .then((res) => {
-                if (!res.ok) throw new Error();
-                return res.json();
-            })
-            .then((data) => setMembership(data))
-            .catch(() => notifyError("Couldn't load membership info"));
     }, [user, navigate]);
 
-    const handleLogout = () => {
-        sessionStorage.clear();
-        navigate('/');
-    };
 
-    const handleCancel = async () => {
-        try {
-            await fetch(`http://localhost:8080/api/membership/${user.id}/membership`, {
-                method: 'DELETE',
-            });
-            notifySuccess("Membership cancelled.");
-            setMembership(null);
-        } catch {
-            notifyError("Failed to cancel membership.");
-        }
-    };
 
     return (
         <>
             <GlobalStyle />
             <div className="container">
-                <aside className={`sidebar ${sidebarOpen ? '' : 'closed'}`}>
-                    <img className="logo" src={Logo} alt="22GYM Logo" />
-                    <button className="toggle-button" onClick={() => setSidebarOpen(!sidebarOpen)}>
-                        {sidebarOpen ? 'Hide' : 'Show'}
-                    </button>
-                    <nav>
-                        <Link to="/main-member">Home</Link>
-                        <Link to="/view-membership">View membership</Link>
-                        <Link to="/cancel-membership">Cancel Membership</Link>
-                        <Link to="/view-classes-member">View Classes</Link>
-                        <Link to="/view-bookings">View Bookings</Link>
-                        <Link to="/history-bookings">History Bookings</Link>
-                        <Link to="#">Settings</Link>
-                    </nav>
-                    <div className="sidebar-footer">
-                        <a href="#" onClick={handleLogout}>Logout</a>
-                    </div>
-                </aside>
+                <SidebarTrainer/>
 
                 <div className="main">
-                    <h1>Your Membership Details</h1>
-                    <p>Welcome to your membership page! Here, you can view all the details related to your active subscription, including its status, start and end dates, and price.</p>
-
-                    <div className="membership-box">
-                        {membership ? (
-                            <>
-                                <div className="membership-status">
-                                    <span><strong>{membership.type}</strong></span>
-                                    <span className="status-active">STATUS: ACTIVE</span>
-                                </div>
-                                <div className="details">
-                                    <p>Start date: {membership.startDate ? new Date(membership.startDate).toLocaleDateString('en-GB') : 'N/A'}</p>
-                                    <p>End date: {membership.endDate ? new Date(membership.endDate).toLocaleDateString('en-GB') : 'N/A'}</p>
-                                    <p>Price: {membership.price} RON</p>
-                                </div>
-                            </>
-                        ) : (
-                            <p>No active membership found.</p>
-                        )}
-
-                        <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '2rem' }}>
-                            If you wish to renew or cancel your subscription, you can do so from the options below.
+                    <div className="welcome">
+                        <h1>Welcome back, {displayName}!</h1>
+                        <p>
+                            You can efficiently manage your gym activities through your trainer account.
+                            Whether you want to schedule new classes, update existing sessions, or track your participants,
+                            everything is just a few clicks away.
                         </p>
+                    </div>
 
-                        <div className="buttons">
-                            <button onClick={() => navigate('/buy-membership')}>BUY</button>
-                            <button className="cancel" onClick={handleCancel}>CANCEL</button>
+                    <div className="cards">
+                        <div className="card">
+                            <h3><CgGym /> ADD CLASS</h3>
+                            <p>Create a new class and make it available for members instantly! Set the schedule, capacity, and details with just a few clicks.</p>
+                            <button onClick={() => navigate('/add-class')}>ADD</button>
+                        </div>
+
+                        <div className="card">
+                            <h3><FaCalendarAlt /> VIEW SCHEDULE</h3>
+                            <p>Stay on top of your training sessions! View your complete schedule, track upcoming classes, and manage your sessions effortlessly.</p>
+                            <button onClick={() => navigate('/view-schedule-trainer')}>VIEW</button>
+                        </div>
+
+                        <div className="card">
+                            <h3><FaRegCalendar /> VIEW CLASSES</h3>
+                            <p>Explore all available classes. Browse sessions, check details, and stay updated on upcoming workouts.</p>
+                            <button onClick={() => navigate('/view-classes-trainer')}>VIEW</button>
+                        </div>
+
+                        <div className="card">
+                            <h3><FaCalendarTimes /> CANCEL CLASS</h3>
+                            <p>Easily adjust your schedule! Cancel a class when needed and keep your schedule flexible.</p>
+                            <button onClick={() => navigate('/view-schedule-trainer')}>CANCEL</button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </>

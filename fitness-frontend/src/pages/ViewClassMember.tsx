@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { FaCalendarAlt, FaClock } from 'react-icons/fa';
-import SidebarTrainer from "../components/SidebarTrainer.tsx";
+import SidebarMember from "../components/SidebarMember.tsx";
 
 interface FitnessClass {
     id: number;
@@ -12,6 +12,7 @@ interface FitnessClass {
     endHour: string;
     description: string;
     trainerName: string;
+    max_capacity: number;
 }
 
 const GlobalStyle = createGlobalStyle`
@@ -162,7 +163,7 @@ const GlobalStyle = createGlobalStyle`
         border-radius: 12px;
         padding: 2rem;
         margin-top: -1rem;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .details .info-box {
@@ -181,9 +182,29 @@ const GlobalStyle = createGlobalStyle`
         color: #374151;
         line-height: 1.7;
     }
+
+    .book-button {
+        margin: 2rem auto 0 auto;
+        display: block;
+        padding: 1rem 3rem;
+        background-color: #84cc16; /* verde smarald */
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
+
+    .book-button:hover {
+        background-color: #65a30d; /* verde închis */
+    }
+
+
 `;
 
-export default function ViewClassTrainer() {
+export default function ViewClassMember() {
     const [fitnessClass, setFitnessClass] = useState<FitnessClass | null>(null);
     const { id } = useParams();
     const navigate = useNavigate();
@@ -196,25 +217,28 @@ export default function ViewClassTrainer() {
     }, [id, navigate]);
 
 
-
     if (!fitnessClass) return null;
+
+    function handleBook() {
+
+    }
 
     return (
         <>
             <GlobalStyle />
             <div className="container">
-                <SidebarTrainer/>
+                <SidebarMember/>
 
                 <div className="main">
                     <div className="class-banner">
-                    <div>
-                        {fitnessClass.name.toUpperCase()}
-                        <small>{fitnessClass.trainerName}</small>
+                        <div>
+                            {fitnessClass.name.toUpperCase()}
+                            <small>{fitnessClass.trainerName}</small>
+                        </div>
                     </div>
-                </div>
 
 
-                <div className="details">
+                    <div className="details">
                         <div className="info-box">
                             <FaCalendarAlt /> {new Date(fitnessClass.date).toLocaleDateString('en-GB')}
                         </div>
@@ -222,6 +246,13 @@ export default function ViewClassTrainer() {
                             <FaClock /> {fitnessClass.startHour.slice(0, 5)} - {fitnessClass.endHour.slice(0, 5)}
                         </div>
                         <div className="description">{fitnessClass.description}</div>
+                        <button
+                            className="book-button"
+                            onClick={handleBook}
+                        >
+                            BOOK THIS CLASS
+                        </button>
+
                     </div>
                 </div>
             </div>
