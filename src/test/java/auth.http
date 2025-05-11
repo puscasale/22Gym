@@ -49,10 +49,10 @@ POST http://localhost:8080/api/admin/trainer
 Content-Type: application/json
 
 {
-  "email": "mama@gmail.com",
-  "password": "mama",
-  "username": "mama",
-  "fullName": "mama"
+  "email": "ana@gmail.com",
+  "password": "123",
+  "username": "ana",
+  "fullName": "ana"
 }
 
 ### Login (autentificare)

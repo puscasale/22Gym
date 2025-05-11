@@ -11,7 +11,10 @@ import ViewMembership from "./pages/ViewMembership.tsx";
 import BuyMembership from "./pages/BuyMembership.tsx";
 import ViewClassesMember from "./pages/ViewClassesMember.tsx";
 import ViewClassMember from "./pages/ViewClassMember.tsx";
+import ViewBookingsMember from "./pages/ViewBookingsMember.tsx";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ViewHistoryBookings from "./pages/ViewHistoryBookings.tsx";
+import ViewParticipants from "./pages/ViewParticipants.tsx";
 
 function App() {
     return (
@@ -30,7 +33,9 @@ function App() {
                 <Route path="/buy-membership" element={<BuyMembership/>} />
                 <Route path="/view-classes-member" element={<ViewClassesMember/>} />
                 <Route path={"/view-class-member/:id"} element={<ViewClassMember/>} />
-
+                <Route path={"/view-bookings"} element={<ViewBookingsMember/>}/>
+                <Route path={"/history-bookings"} element={<ViewHistoryBookings/>}/>
+                <Route path="/view-participants/:id" element={<ViewParticipants />} />
             </Routes>
         </Router>
     );

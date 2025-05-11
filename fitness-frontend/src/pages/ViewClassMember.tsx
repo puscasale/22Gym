@@ -3,6 +3,7 @@ import { useParams, useNavigate} from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { FaCalendarAlt, FaClock } from 'react-icons/fa';
 import SidebarMember from "../components/SidebarMember.tsx";
+import { notifyError, notifySuccess } from "../utils/Notify.ts";
 
 interface FitnessClass {
     id: number;
@@ -208,20 +209,67 @@ export default function ViewClassMember() {
     const [fitnessClass, setFitnessClass] = useState<FitnessClass | null>(null);
     const { id } = useParams();
     const navigate = useNavigate();
+    const [isFullyBooked, setIsFullyBooked] = useState(false);
+
+    const storedUser = sessionStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    const memberId = user ? user.id : null;
+
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/classes/${id}`)
             .then(res => res.json())
             .then(data => setFitnessClass(data))
             .catch(() => navigate('/view-classes-trainer'));
+
+        fetch(`http://localhost:8080/api/bookings/class/${id}/isFullyBooked`)
+            .then(res => res.json())
+            .then(data => setIsFullyBooked(data))
+            .catch(() => notifyError("Failed to check class availability"));
     }, [id, navigate]);
+
 
 
     if (!fitnessClass) return null;
 
-    function handleBook() {
+    const handleBook = async () => {
+        if (!fitnessClass || isFullyBooked) return;
 
-    }
+        const classDateTime = new Date(`${fitnessClass.date}T${fitnessClass.startHour}`);
+        const now = new Date();
+
+        if (classDateTime < now) {
+            notifyError("Cannot book a class in the past.");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:8080/api/bookings", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    classId: fitnessClass.id,
+                    memberId: memberId,
+                    status: "ACTIVE",
+                }),
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                notifyError(errorMessage);
+                return;
+            }
+
+            notifySuccess("Booking successful!");
+            setIsFullyBooked(true);
+        } catch {
+            notifyError("Error booking the class");
+        }
+    };
+
+
 
     return (
         <>
@@ -247,11 +295,13 @@ export default function ViewClassMember() {
                         </div>
                         <div className="description">{fitnessClass.description}</div>
                         <button
-                            className="book-button"
+                            className={`book-button ${isFullyBooked ? 'disabled' : ''}`}
                             onClick={handleBook}
+                            disabled={isFullyBooked}
                         >
-                            BOOK THIS CLASS
+                            {isFullyBooked ? "Fully Booked" : "BOOK THIS CLASS"}
                         </button>
+
 
                     </div>
                 </div>

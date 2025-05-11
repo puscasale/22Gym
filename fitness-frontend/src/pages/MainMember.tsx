@@ -231,7 +231,7 @@ export default function MainMember() {
                         <div className="card">
                             <h3><FaRegCalendar /> UPCOMING CLASSES</h3>
                             <p>Stay on top of your schedule! View your active bookings and manage your upcoming classes with ease. Cancel your reservations anytime.</p>
-                            <button onClick={() => navigate('/bookings')}>VIEW</button>
+                            <button onClick={() => navigate('/view-bookings')}>VIEW</button>
 
                         </div>
 

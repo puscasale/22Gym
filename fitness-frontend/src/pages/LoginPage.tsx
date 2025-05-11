@@ -137,22 +137,23 @@ export default function LoginPage() {
             const text = await response.text();
 
             if (!response.ok) {
-                alert(`Login eșuat: ${text}`);
+                notifyError(`Username or password incorect`);
                 return;
             }
 
             const user = JSON.parse(text);
             sessionStorage.setItem("user", JSON.stringify(user));
-            if (user.userType ==='MEMBER') {
+            if (user.userType === 'MEMBER') {
                 navigate('/main-member');
             } else {
                 navigate('/main-trainer');
             }
         } catch (error) {
             console.error('Login error:', error);
-            alert('Eroare la login.');
+            notifyError('An error occurred during login. Please try again.');
         }
     };
+
 
     return (
         <>

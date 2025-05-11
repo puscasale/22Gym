@@ -164,6 +164,7 @@ export default function ViewScheduleTrainer() {
         navigate(`/view-participants/${id}`);
     };
 
+
     const handleEditClass = (id: number) => {
         navigate(`/edit-class/${id}`);
     };
