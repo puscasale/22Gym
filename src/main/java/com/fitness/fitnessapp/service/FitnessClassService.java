@@ -5,6 +5,7 @@ import com.fitness.fitnessapp.domain.Trainer;
 import com.fitness.fitnessapp.domain.dto.CreateFitnessClassDTO;
 import com.fitness.fitnessapp.repository.FitnessClassRepository;
 import com.fitness.fitnessapp.repository.TrainerRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,10 +16,12 @@ public class FitnessClassService {
 
     private final FitnessClassRepository fitnessClassRepository;
     private  TrainerRepository trainerRepository;
+    private SimpMessagingTemplate messagingTemplate;
 
-    public FitnessClassService(FitnessClassRepository fitnessClassRepository,TrainerRepository trainerRepository) {
+    public FitnessClassService(FitnessClassRepository fitnessClassRepository,TrainerRepository trainerRepository, SimpMessagingTemplate messagingTemplate) {
         this.fitnessClassRepository = fitnessClassRepository;
         this.trainerRepository = trainerRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public List<FitnessClass> getAllClasses() {
@@ -36,11 +39,16 @@ public class FitnessClassService {
                 .endHour(dto.getEndHour())
                 .description(dto.getDescription())
                 .maxCapacity(dto.getMaxCapacity())
-                .trainer(trainer)  // aici legăm trainer-ul corect
+                .trainer(trainer)
                 .build();
 
-        return fitnessClassRepository.save(fitnessClass);
+        FitnessClass savedClass = fitnessClassRepository.save(fitnessClass);
+
+        messagingTemplate.convertAndSend("/topic/classes", savedClass); // ← mutat după save
+
+        return savedClass;
     }
+
 
 
 

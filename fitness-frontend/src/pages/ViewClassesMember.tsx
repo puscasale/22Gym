@@ -3,6 +3,9 @@ import { useNavigate} from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { FaCalendarAlt } from 'react-icons/fa';
 import SidebarMember from "../components/SidebarMember.tsx";
+import { useStompSubscribe } from "../hooks/useStompSubscribe";
+import {notifySuccess} from "../utils/Notify.ts";
+
 
 interface FitnessClass {
     id: number;
@@ -191,6 +194,19 @@ export default function ViewClassesMember() {
             .then(data => setClasses(data))
             .catch(err => console.error("Failed to fetch classes", err));
     }, []);
+
+    useStompSubscribe([
+        {
+            topic: "/topic/classes",
+            handler: (payload) => {
+                const newClass = payload as FitnessClass;
+                setClasses((prev) => [...prev, newClass]);
+                notifySuccess(`New class "${newClass.name}" just added!`);
+            }
+        }
+    ]);
+
+
 
     const daysOfWeek = Array.from({ length: 5 }, (_, i) => {
         const date = new Date(startDate);

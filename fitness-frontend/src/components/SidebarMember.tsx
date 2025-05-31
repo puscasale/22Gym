@@ -121,7 +121,6 @@ export default function SidebarMember() {
                 <Link to="/view-classes-member">View Classes</Link>
                 <Link to="/view-bookings">View Bookings</Link>
                 <Link to="/history-bookings">History Bookings</Link>
-                <Link to="#">Settings</Link>
             </Nav>
 
             <SidebarFooter>

@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Login (autentificare)
-POST http://localhost:8080/api/auth/login?username=ana&password=1234
+POST http://localhost:8080/api/auth/login?username=bibi&password=123
 
 
 ### CREATE Membership (GOLD - 6 luni)

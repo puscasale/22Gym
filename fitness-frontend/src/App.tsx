@@ -1,3 +1,4 @@
+
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage.tsx";
 import MainTrainer from "./pages/MainTrainer.tsx";

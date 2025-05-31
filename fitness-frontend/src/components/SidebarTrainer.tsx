@@ -119,7 +119,6 @@ export default function SidebarTrainer() {
                 <Link to="/view-classes-trainer">View Classes</Link>
                 <Link to="/view-schedule-trainer">View Schedule</Link>
                 <Link to="/add-class">Add Class</Link>
-                <Link to="#">Settings</Link>
             </Nav>
 
             <SidebarFooter>

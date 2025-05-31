@@ -36,7 +36,7 @@ export function notifySuccess(msg: string) {
     toastMixin.fire({
         icon: "success",
         title: msg,
-        timer: 3000
+        timer: 5000
     });
 }
 

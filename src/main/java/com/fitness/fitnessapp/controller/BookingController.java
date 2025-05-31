@@ -2,6 +2,7 @@ package com.fitness.fitnessapp.controller;
 
 import com.fitness.fitnessapp.domain.Booking;
 import com.fitness.fitnessapp.domain.Member;
+import com.fitness.fitnessapp.domain.dto.MemberWithStatusDTO;
 import com.fitness.fitnessapp.domain.enums.Status;
 import com.fitness.fitnessapp.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,12 @@ public class BookingController {
 
     @Autowired
     private BookingService bookingService;
+
+    @GetMapping("/class/{classId}/member/{memberId}/hasBooking")
+    public boolean hasMemberBookedClass(@PathVariable Long classId, @PathVariable Long memberId) {
+        return bookingService.existsByFitnessClassIdAndMemberIdAndStatus(classId, memberId, Status.ACTIVE);
+    }
+
 
     @PostMapping
     public Booking createBooking(@RequestBody BookingRequest request) {
@@ -55,9 +62,20 @@ public class BookingController {
     }
 
     @GetMapping("/class/{classId}/participants")
-    public List<Member> getParticipantsByClassId(@PathVariable Long classId) {
-        return bookingService.getParticipantsByClassId(classId);
+    public List<MemberWithStatusDTO> getParticipantsWithStatus(@PathVariable Long classId) {
+        return bookingService.getParticipantsWithStatusByClassId(classId);
     }
+
+
+    @PatchMapping("/{classId}/member/{memberId}/status")
+    public void updateBookingStatus(
+            @PathVariable Long classId,
+            @PathVariable Long memberId,
+            @RequestParam Status status
+    ) {
+        bookingService.updateBookingStatus(classId, memberId, status);
+    }
+
 
 
 

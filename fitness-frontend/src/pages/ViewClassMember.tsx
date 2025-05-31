@@ -210,6 +210,8 @@ export default function ViewClassMember() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [isFullyBooked, setIsFullyBooked] = useState(false);
+    const [hasBooked, setHasBooked] = useState(false);
+
 
     const storedUser = sessionStorage.getItem('user');
     const user = storedUser ? JSON.parse(storedUser) : null;
@@ -226,7 +228,14 @@ export default function ViewClassMember() {
             .then(res => res.json())
             .then(data => setIsFullyBooked(data))
             .catch(() => notifyError("Failed to check class availability"));
-    }, [id, navigate]);
+
+        if (memberId) {
+            fetch(`http://localhost:8080/api/bookings/class/${id}/member/${memberId}/hasBooking`)
+                .then(res => res.json())
+                .then(data => setHasBooked(data))
+                .catch(() => notifyError("Failed to check user booking"));
+        }
+    }, [id, navigate, memberId]);
 
 
 
@@ -263,7 +272,8 @@ export default function ViewClassMember() {
             }
 
             notifySuccess("Booking successful!");
-            setIsFullyBooked(true);
+            setHasBooked(true);
+
         } catch {
             notifyError("Error booking the class");
         }
@@ -295,13 +305,16 @@ export default function ViewClassMember() {
                         </div>
                         <div className="description">{fitnessClass.description}</div>
                         <button
-                            className={`book-button ${isFullyBooked ? 'disabled' : ''}`}
+                            className={`book-button ${isFullyBooked || hasBooked ? 'disabled' : ''}`}
                             onClick={handleBook}
-                            disabled={isFullyBooked}
+                            disabled={isFullyBooked || hasBooked}
                         >
-                            {isFullyBooked ? "Fully Booked" : "BOOK THIS CLASS"}
+                            {isFullyBooked
+                                ? "CLASS FULLY BOOKED"
+                                : hasBooked
+                                    ? "ALREADY BOOKED"
+                                    : "BOOK THIS CLASS"}
                         </button>
-
 
                     </div>
                 </div>

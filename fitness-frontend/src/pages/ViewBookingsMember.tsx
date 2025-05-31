@@ -90,25 +90,32 @@ export default function ViewBookingsMember() {
         fetch(`http://localhost:8080/api/bookings/user/${memberId}`)
             .then(res => res.json())
             .then(data => {
-                const todayBookings = data.filter((booking: Booking) => booking.fitnessClass.date === today);
+                // Filtrăm doar rezervările ACTIVE
+                const activeBookings = data.filter((booking: Booking) => booking.status === "ACTIVE");
+
+                const todayBookings = activeBookings.filter(
+                    (booking: Booking) => booking.fitnessClass.date === today
+                );
 
                 if (todayBookings.length > 0) {
                     setBookings(todayBookings);
                 } else {
-                    // Sort bookings by date
-                    const sortedBookings = data.sort((a: Booking, b: Booking) =>
+                    // Sortăm rezervările active după dată
+                    const sortedBookings = activeBookings.sort((a: Booking, b: Booking) =>
                         new Date(a.fitnessClass.date).getTime() - new Date(b.fitnessClass.date).getTime()
                     );
 
-
-                    // Find the next booking after today
-                    const nextBooking = sortedBookings.find((booking: Booking) => new Date(booking.fitnessClass.date) > new Date(today));
+                    // Găsim următoarea clasă viitoare
+                    const nextBooking = sortedBookings.find(
+                        (booking: Booking) => new Date(booking.fitnessClass.date) > new Date(today)
+                    );
 
                     setBookings(nextBooking ? [nextBooking] : []);
                 }
             })
             .catch(() => notifyError("Failed to load bookings"));
     }, [memberId, navigate, today]);
+
 
     const handleCancel = async (bookingId: number) => {
         try {
