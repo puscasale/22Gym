@@ -73,6 +73,12 @@ Whether you’re a **gym trainer** scheduling and managing classes, or a **membe
 
 ## 🖼️ Screenshots 
 
+<img width="1708" alt="Screenshot 2025-05-31 at 19 22 25" src="https://github.com/user-attachments/assets/b27126a5-364f-49de-b5cb-d6d97bc8981d" />
 
+<img width="1710" alt="Screenshot 2025-05-31 at 19 22 45" src="https://github.com/user-attachments/assets/aba3c8cb-1bde-4fac-ab7e-13d1cf540a2e" />
+
+<img width="1710" alt="Screenshot 2025-05-31 at 19 23 23" src="https://github.com/user-attachments/assets/57c5c448-91ec-4bf5-aecb-0d6af64a4ff8" />
+
+<img width="1710" alt="Screenshot 2025-05-31 at 19 23 47" src="https://github.com/user-attachments/assets/21e3b5f3-5bd6-4b69-b60d-363fcfcc073c" />
 
 
